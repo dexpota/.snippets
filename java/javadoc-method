@@ -1,0 +1,13 @@
+---
+name: javadoc-method
+description: How to use javadoc to document class's methods.
+type: static
+language: java
+---
+/**
+ * A single sentence. A full description.
+ *
+ * @param numA This is the first paramter to this method
+ * @param numB  This is the second parameter to this method
+ * @return int This is the value returned.
+ */
