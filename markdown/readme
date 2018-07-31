@@ -1,0 +1,13 @@
+---
+description: A simple template to write your readme files.
+language: markdown
+name: readme.md
+notes:
+- Github markdown supports html tags.
+type: static
+---
+<h1 align="center">
+  <img src="icon.svg" alt="Project name" />
+</h1>
+
+
