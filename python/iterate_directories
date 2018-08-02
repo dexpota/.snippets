@@ -1,0 +1,30 @@
+---
+description: A generator to iterate directories and optionally filtering.
+language: python
+name: Directories iterations
+type: static
+---
+import os
+import fnmatch
+
+
+def iterate_directory(root, options=None):
+    for dirpath, dirnames, filenames in os.walk(root):
+        name = os.path.split(dirpath)[1]
+
+        if options is not None:
+            if any(fnmatch.fnmatch(name, w) for w in options.exc_dirs):
+                del dirnames[:]  # Don't recurse here
+                continue
+        for fn in filenames:
+            if options is not None:
+                if any(fnmatch.fnmatch(fn, w) for w in options.exc_files):
+                    continue
+            path = os.path.join(dirpath, fn)
+            yield path
+
+
+def iterate_directories(roots, options=None):
+    """" A generator to enumerate the contents of directories recursively. """
+    for root in roots:
+        iterate_directory(root, options)

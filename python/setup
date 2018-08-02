@@ -1,3 +1,9 @@
+---
+description: A simple setup.py file.
+language: python
+name: setup.py
+type: static
+---
 import setuptools
 
 with open("README.md", "r") as fh:
