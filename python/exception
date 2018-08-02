@@ -1,0 +1,72 @@
+---
+description: Handle your exceptions.
+language: python
+name: Handling exceptions
+type: static
+---
+import sys
+from functools import wraps
+from random import randint
+
+
+def exceptions(*exc_list,
+                else_function=None,
+                finally_function=None):
+    def _exceptions(function):
+        def _decorator(*args, **kwargs):
+            try:
+                result = function(*args, **kwargs)
+            except:
+                exc_object = sys.exc_info()[1]
+                exc_handlers = filter(lambda e:
+                                      isinstance(exc_object, e[0]), exc_list)
+
+                exc_handler = next(exc_handlers, None)
+                if exc_handler is None:
+                    raise
+
+                if not exc_handler[1](exc_object):
+                    raise
+            else:
+                if else_function is not None:
+                    else_function()
+                return result
+            finally:
+                if finally_function is not None:
+                    finally_function()
+        return wraps(function)(_decorator)
+    return _exceptions
+
+
+def dummy_handler(e):
+    print("Exception handling ...")
+    return True
+
+
+def else_handler():
+    print("Else handling ...")
+
+
+def finally_handler():
+    print("Finally handling ...")
+
+
+@exceptions((ValueError, dummy_handler),
+            (IOError, dummy_handler),
+            (AssertionError, dummy_handler),
+            else_function=else_handler,
+            finally_function=finally_handler)
+def foo():
+    rand = randint(0, 4)
+    if rand == 0:
+        raise AssertionError()
+    elif rand == 1:
+        raise ValueError()
+    elif rand == 2:
+        raise IOError()
+    elif rand == 3:
+        raise AttributeError()
+    elif rand == 4:
+        return rand
+
+print(foo())

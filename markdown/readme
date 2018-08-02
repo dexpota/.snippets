@@ -6,8 +6,15 @@ notes:
 - Github markdown supports html tags.
 type: static
 ---
+:toc:
+:toc-placement!:
+
 <h1 align="center">
   <img src="icon.svg" alt="Project name" />
 </h1>
 
+toc::[]
+
+# 1
+## 2
 
