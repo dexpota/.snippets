@@ -1,0 +1,42 @@
+---
+description: Time your method using this decorator.
+language: python
+name: timing decorator
+type: static
+---
+from time import time
+from time import clock
+from functools import wraps
+from sys import stdout
+from os import linesep
+
+def process_timing(stream=stdout):
+    def _timing_decorator(function):
+        def _decorator(*args, **kwargs):
+            start = clock()
+            result = function(*args, **kwargs)
+            stream.write(str(clock() - start) + "ck" + linesep)
+            return result
+
+        return wraps(function)(_decorator)
+    return _timing_decorator
+
+def wall_timing(stream=stdout):
+    def _timing_decorator(function):
+        def _decorator(*args, **kwargs):
+            start = time()
+            result = function(*args, **kwargs)
+            stream.write(str(time() - start) + "s" + linesep)
+            return result
+
+        return wraps(function)(_decorator)
+    return _timing_decorator
+
+from time import sleep
+
+@wall_timing(stdout)
+def foo(arg):
+    print("Function foo with argument: " + str(arg))
+    sleep(2)
+
+foo("ciao")
