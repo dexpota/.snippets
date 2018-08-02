@@ -1,0 +1,27 @@
+---
+description: Check if one directory is a child of the other one
+language: python
+name: is subdirectory
+type: static
+---
+from os.path import realpath, relpath
+import os
+import re
+
+def is_subdirectory(root, directory):
+    abs_directory = realpath(directory)
+    abs_root = realpath(root)
+
+    relative = relpath(abs_root, abs_directory)
+
+    escaped_pardir = re.escape(os.pardir)
+    escaped_sep = re.escape(os.sep)
+    # everything which resemble a string such as one o these
+    # '../../../../' '../' '..' '../..'
+    # will pass the test
+    return bool(re.match("({pardir}{sep})*({pardir}{sep}?\s?$)".format(pardir=escaped_pardir, sep=escaped_sep), relative))
+
+if __name__ == "__main__":
+    assert is_subdirectory("/prova/prova/abba", "/prova/prova/abba/pappa/dadda")
+    assert not is_subdirectory("/prova/prova/abba", "/prova/prova/dadda")
+    assert is_subdirectory("/a", "/a/b")
