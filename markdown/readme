@@ -6,15 +6,58 @@ notes:
 - Github markdown supports html tags.
 type: static
 ---
-:toc:
-:toc-placement!:
+<!-- Header -->
+![Project logo](https://avatars1.githubusercontent.com/u/4284691?v=3&s=200)
 
-<h1 align="center">
-  <img src="icon.svg" alt="Project name" />
-</h1>
+# Project title
+> Project subtitle
 
-toc::[]
+<!-- Badges -->
 
-# 1
-## 2
+<!-- Some nice graphics to illustrate the use of your project -->
 
+<!-- Optional TOC -->
+## Table of contents
+
+
+## Installation
+
+Install all the dependencies, clone the repository and install the project.
+
+## Usage
+
+Some examples of usages.
+
+## Features
+
+## Documentation
+
+## Contributing
+
+A list of steps to follow to contribute to this project. If the readme file is
+too much long you can place these information on another md file.
+
+## Team or contributors
+
+List the contributors to this project in this section. You can display their
+names with their profile pictures.
+
+## FAQ
+
+* **A question about your project?**
+	* Here is the answer.
+
+## Support
+
+Reach me out!
+
+- Website at [www.example.com](www.example.com)
+- Twitter at @example
+
+## Donations
+
+How can you support this project? by donating something.
+
+## License
+
+The license for your project.
