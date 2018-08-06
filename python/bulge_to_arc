@@ -1,0 +1,35 @@
+---
+description: Convert a bulge to an arc.
+language: python
+name: bulge to arc
+type: static
+---
+
+def bulge_to_arc(p0, p1, bulge):
+    """
+    Compute the arc between the points p0 and p1 given the bulge value.
+    :param p0: first arc point
+    :param p1: second arc point
+    :param bulge: bulge value between p0 and p1
+    :return: a tuple with center, radius, start_angle, angle
+    """
+    angle = math.atan(bulge) * 4.0
+    angleDeg = math.degrees(angle)
+
+    dist = math.sqrt((p1[0] - p0[0]) ** 2 + (p1[1] - p0[1]) ** 2)
+    sagitta = dist / 2.0 * bulge
+    radius = abs(((dist / 2.0) ** 2 + sagitta ** 2) / (2 * sagitta))
+
+    theta = 4.0 * math.atan(abs(bulge))
+    gamma = (math.pi - theta) / 2.0
+
+    if bulge > 0:
+        phi = math.atan2(p1[1] - p0[1], p1[0] - p0[0]) + gamma
+    else:
+        phi = math.atan2(p1[1] - p0[1], p1[0] - p0[0]) - gamma
+
+    cx = p0[0] + radius * math.cos(phi)
+    cy = p0[1] + radius * math.sin(phi)
+    startAngle = math.acos((p0[0] - cx) / radius)
+
+    return (cx, cy), radius, math.degrees(startAngle), angleDeg
