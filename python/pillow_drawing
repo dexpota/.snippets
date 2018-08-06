@@ -1,0 +1,30 @@
+---
+description: Using pillow to draw shapes
+language: python
+name: pillow drawings
+type: static
+---
+#!/usr/bin/python
+# -*- coding: utf8 -*-
+
+try:
+    from PIL import Image, ImageDraw
+except ImportError:
+    print 'You need to install the Python Image Library (http://www.pythonware.com/products/pil/)'
+    # documentation at http://effbot.org/imagingbook/pil-index.htm
+    exit(1)
+
+from math import *
+
+
+width, height = 64, 64
+
+# create an image
+im = Image.new('RGBA', (width, height))
+draw = ImageDraw.Draw(im)
+
+# background
+draw.rectangle((0,0, width, height), fill=(255, 255, 255))
+draw.line((0,0,width,height), (10,10,10), 1)
+draw.ellipse([(10, 10), (width-10, height-10)], (0, 0, 0))
+im.save('png-PIL-example.png')
