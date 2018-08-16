@@ -1,0 +1,40 @@
+---
+description: Desktop entry
+language: xdg 
+name: entry.desktop
+type: static
+---
+
+[Desktop Entry]
+
+# The type as listed above
+Type=Application
+
+# The version of the desktop entry specification to which this file complies
+Version=1.0
+
+# The name of the application
+Name=jMemorize
+
+# A comment which can/will be used as a tooltip
+Comment=Flash card based learning tool
+
+# The path to the folder in which the executable is run
+Path=/opt/jmemorise
+
+# The executable of the application, possibly with arguments.
+Exec=jmemorize
+
+# The name of the icon that will be used to display this entry
+# The freedesktop.org standard specifies in which order and directories
+# programs should look for icons:
+# $HOME/.icons (for backwards compatibility)
+# $XDG_DATA_DIRS/icons
+# /usr/share/pixmaps
+Icon=jmemorize
+
+# Describes whether this application needs to be run in a terminal or not
+Terminal=false
+
+# Describes the categories in which this entry should be shown
+Categories=Education;Languages;Java;
