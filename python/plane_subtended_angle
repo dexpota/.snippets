@@ -1,0 +1,35 @@
+---
+description: Compute the subtended solid angle of a plane at the origin of the system 
+language: python
+name: Subtended solid angle by a plane
+type: static
+---
+from scipy.integrate import dblquad
+import numpy as np
+
+
+def plane_subtended_angle(p, u, v, t1, t2, lower_s, upper_s):
+    """
+    Compute the solid angle subtended by a plane at the origin. plane(t, s) = p + t*u + s*v
+    :param p: point lying on the plane
+    :param u: first vector lying on the plane, not parallel to the second
+    :param v: second vector lying on the plane, not parallel to the first
+	:param t1: lower bound for t value
+	:param t2: upper bound for t value
+	:param lower_s: a function taking a single float value t and returning the value of the lower boundery curve for s
+	:param upper_s: a function taking a single float value t and returning the value of the upper boundery curve for s
+    :return: tuple where the first value is the solid angle
+    and the second the error
+    """
+    n = np.cross(u, v)
+
+    def plane(s, t):
+        r = p + t*u + s*v
+        return np.dot(r, n)/(np.linalg.norm(r) * np.dot(r, r))
+
+    return dblquad(plane, t1, t2, lower_s, upper_s)
+
+u = np.array([1, 0, 0])
+v = np.array([0, 0.5, 0])
+p = np.array([0, 0, 1])
+print(plane_subtended_angle(p, u, v, -0.5, 0.5, lambda t: -1, lambda t: 1))

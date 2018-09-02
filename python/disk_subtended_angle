@@ -1,7 +1,7 @@
 ---
-description: Compute the 3d angle subtended by a disk 
+description: Compute the solid angle subtended by a disk
 language: python
-name: Subtended angle
+name: Subtended solid angle by a disk
 type: static
 ---
 
