@@ -1,0 +1,92 @@
+---
+description: Draw a bulge.
+language: python
+name: Draw a bulge
+type: static
+---
+from __future__ import unicode_literals
+from matplotlib import patches
+import matplotlib.pyplot as plt
+import math
+
+plt.figure(figsize=(8, 8))
+plt.gca().set_axis_bgcolor("white")
+plt.tick_params(
+        axis='both',  # changes apply to the x-axis
+        which='both',  # both major and minor ticks are affected
+        left="off",
+        right="off",
+        labelleft="off",
+        bottom='off',  # ticks along the bottom edge are off
+        top='off',
+        labelbottom='off'
+    )
+c = patches.Circle((0, 0), 1, fill=False)
+plt.gca().add_patch(c)
+plt.xlim([-1.1, 1.1])
+plt.ylim([-1.1, 1.1])
+plt.axis("off")
+plt.gcf().set_tight_layout(True)
+
+a = (1, 30)
+b = (1, 120)
+
+import numpy as np
+
+cartesian = np.array(
+             [(math.cos(math.radians(a[1])), math.sin(math.radians(a[1]))),
+             (math.cos(math.radians(b[1])), math.sin(math.radians(b[1])))])
+
+# plot points and annotation
+plt.text(-0.05, -0.03, "O")
+plt.text(cartesian[0][0] + 0.03, cartesian[0][1] + 0.01, "P0")
+plt.text(cartesian[1][0] - 0.07, cartesian[1][1] + 0.01, "P1")
+plt.plot(*zip(*cartesian), color="lightslategrey")
+
+mean_point = np.mean(cartesian, axis=0)
+
+segment_1 = np.array([(0, 0), cartesian[0]])
+segment_2 = np.array([(0, 0), cartesian[1]])
+plt.plot(*zip(*segment_1), color="steelblue")
+plt.plot(*zip(*segment_2), color="steelblue")
+
+arc = patches.Arc((0, 0), 2, 2, 0, a[1], b[1], color="navy", linewidth=2)
+plt.text(0.09, 0.15, "theta")
+plt.gca().add_patch(arc)
+
+angle = patches.Arc((0, 0), 0.3, 0.3, 0, a[1], b[1], color="lightslategrey")
+plt.gca().add_patch(angle)
+
+#segment_3 = np.array([(0, 0), mean_point])
+#plt.plot(*zip(*segment_3))
+
+# angle between three points
+def draw_angle(p1, p2, p3):
+    # check order
+    if np.cross(p2 - p1, p3 - p1) > 0:
+        p2, p3 = p3, p2
+    a = math.acos(np.dot(p3 - p1, p2 - p1)/(np.linalg.norm(p2 - p1) * np.linalg.norm(p3 - p1)))
+    angle = math.degrees(math.atan2(p3[1] - p1[1], p3[0] - p1[0]))
+    angle_2 = patches.Arc(p1, 0.3, 0.3, angle, 0, math.degrees(a), color="lightslategrey")
+    plt.gca().add_patch(angle_2)
+
+mid_point_angle = math.atan2(mean_point[1], mean_point[0])
+mid_point_circle = (math.cos(mid_point_angle), math.sin(mid_point_angle))
+plt.plot([math.cos(mid_point_angle + math.pi), math.cos(mid_point_angle)],
+         [math.sin(mid_point_angle + math.pi), math.sin(mid_point_angle)], "lightslategrey")
+
+plt.plot([mid_point_circle[0], cartesian[0][0]], [mid_point_circle[1], cartesian[0][1]], "steelblue")
+plt.plot([mid_point_circle[0], cartesian[1][0]], [mid_point_circle[1], cartesian[1][1]], "steelblue")
+
+draw_angle(cartesian[0], mid_point_circle, mean_point)
+draw_angle(cartesian[1], mid_point_circle, mean_point)
+
+draw_angle(cartesian[0], cartesian[1], np.array([0, 0]))
+draw_angle(cartesian[1], np.array([0, 0]), cartesian[0])
+draw_angle(cartesian[1], cartesian[0], np.array([0, 0]))
+
+plt.scatter(cartesian[0][0], cartesian[0][1], s=50, color="navy")
+plt.scatter(cartesian[1][0], cartesian[1][1], s=50, color="navy")
+
+plt.savefig("test.png")
+plt.show()
