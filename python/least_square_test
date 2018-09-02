@@ -1,0 +1,67 @@
+---
+description: Test the least square intersection algorithm.
+language: python
+name: Least square intersection. 
+type: static
+---
+from least_square_intersection import ls_lines_intersection
+import numpy as np
+import matplotlib.pyplot as plt
+
+a1 = np.array([1, 1])   # a point lying on the line
+a2 = np.array([0, 0])
+a3 = np.array([3, 4])
+n1 = np.array([1, 0])   # the direction of the line
+n2 = np.array([-1, 1])
+n3 = np.array([1, 2])
+
+point = ls_lines_intersection([a1, a2, a3],
+                              [n1, n2, n3])
+
+plt.plot(point[0], point[1], "xr")
+
+plt.plot(a1[0], a1[1], "ob")
+plt.plot((a1 + n1)[0], (a1 + n1)[1], "ob")
+
+plt.plot(a2[0], a2[1], "og")
+plt.plot((a2 + n2)[0], (a2 + n2)[1], "og")
+
+plt.plot(a3[0], a3[1], "oy")
+plt.plot((a3 + n3)[0], (a3 + n3)[1], "oy")
+
+
+def line_extension(p, d, xmin, ymin, xmax, ymax):
+    """
+    Return the segment of the line p,d passing inside the bounding box defined by xmin,ymin,xmax,ymax
+    :param p: point lying on the line
+    :param d: line direction
+    :param xmin: bounding box xmin
+    :param ymin: bounding box ymin
+    :param xmax: bounding box xmax
+    :param ymax: bounding box ymax
+    :return: a couple of points of the segment passing through the bounding box
+    """
+    if d[0] == 0:
+        return [p[0], p[0]], [ymin, ymax]
+
+    x = xmin
+    txmin = (x - p[0])/d[0]
+    yxmin = p[1] + txmin*d[1]
+    m = d[1]/d[0]
+    return [xmin, xmax], [yxmin, yxmin + (xmax-xmin)*m]
+
+xmin, xmax = plt.xlim()
+ymin, ymax = plt.ylim()
+
+# draw all lines on the entire plot area
+values = line_extension(a1, n1, xmin, ymin, xmax, ymax)
+plt.plot(*values)
+values = line_extension(a2, n2, xmin, ymin, xmax, ymax)
+plt.plot(*values)
+values = line_extension(a3, n3, xmin, ymin, xmax, ymax)
+plt.plot(*values)
+
+plt.xlim(xmin, xmax)
+plt.ylim(ymin, ymax)
+
+plt.show()

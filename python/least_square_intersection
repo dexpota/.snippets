@@ -1,0 +1,36 @@
+---
+description: Compute the intersection point between multiple lines using the least-square method.
+language: python
+name: Least square intersection. 
+type: static
+---
+import numpy as np
+from numpy.linalg import solve, norm
+
+
+def ls_lines_intersection(a, n, transpose=True):
+    """
+    Return the point of intersection computed using the least-square method.
+    :param a: a list of point lying on the lines. Points are nx1 matrices
+    :param n: a list of line directions. Directions are nx1 matrices.
+    :param transpose: should transpose vectors? default true
+    :return: the point of intersection
+    """
+    assert(len(a) == len(n))  # same numbers of points as numbers of directions
+
+    if transpose:
+        n = map(lambda v: np.asmatrix(v/norm(v)).T, n)  # normalize directions and transpose
+        a = map(lambda v: np.asmatrix(v).T, a)          # transform into matrix and transpose
+    else:
+        n = map(lambda v: np.asmatrix(v/norm(v)).T, n)  # normalize directions
+        a = map(lambda v: np.asmatrix(v), a)            # transform into matrix
+
+    r = np.zeros((n[0].shape[0], n[0].shape[0]))
+    q = np.zeros((n[0].shape[0], 1))
+    for point, direction in zip(a, n):
+        ri = np.identity(direction.shape[0]) - direction.dot(direction.T)
+        qi = ri.dot(point)
+        r = r + ri
+        q = q + qi
+
+    return solve(r, q)
