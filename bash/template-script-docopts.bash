@@ -53,7 +53,8 @@ import_utilities() {
 	fi
 }
 
-# This function will be called if the script prematurely exits.
+# This function will be called when the script exits or when one of TERM or 
+# INT signal is received.
 cleanup() {
 	# your cleaning code here ...
 	die "Exit trapped."
@@ -65,6 +66,11 @@ initialize() {
 
 	# trap bad exits with the cleanup function
 	trap cleanup EXIT INT TERM
+
+	# run bash in debugging mode
+	if debug; then
+		set -x
+	fi
 }
 
 main() {
