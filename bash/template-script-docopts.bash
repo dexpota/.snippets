@@ -13,6 +13,12 @@
 
 # Configuration
 import_utilites=true
+# exits the script if you try to use uninitialized variables
+set -o nounset
+# exits the script if any statement returns a non-true return value
+# if you are willing to continue when a statement fails you can use this
+# construct: command || true
+set -o errexit
 
 usage() {
 	cat << EOU
@@ -27,7 +33,7 @@ debug() {
 	[ $debug = "true" ]
 }
 
-import() {
+import_utilities() {
 	# if we want to import common utilities
 	if [ "$import_utilites" == true ]; then
 
@@ -47,9 +53,22 @@ import() {
 	fi
 }
 
-main() {
-	import
+# This function will be called if the script prematurely exits.
+cleanup() {
+	# your cleaning code here ...
+	die "Exit trapped."
+}
 
+initialize() {
+	# import utilities
+	import_utilites
+
+	# trap bad exits with the cleanup function
+	trap cleanup EXIT INT TERM
+}
+
+main() {
+	initialize
 	if verbose; then
 		echo "Verbose mode..."
 		echo
