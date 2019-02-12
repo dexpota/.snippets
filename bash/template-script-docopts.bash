@@ -2,7 +2,7 @@
 # description:
 # language: bash
 # name: template-script-docopts
-# version: 0.1
+# version: 0.2
 # ---
 
 #!/usr/bin/env bash
@@ -12,13 +12,15 @@
 # @license
 
 # Configuration
+configure() {
 import_utilites=true
-# exits the script if you try to use uninitialized variables
-set -o nounset
-# exits the script if any statement returns a non-true return value
-# if you are willing to continue when a statement fails you can use this
-# construct: command || true
-set -o errexit
+	# exits the script if you try to use uninitialized variables
+	set -o nounset
+	# exits the script if any statement returns a non-true return value
+	# if you are willing to continue when a statement fails you can use this
+	# construct: command || true
+	set -o errexit
+}
 
 usage() {
 	cat << EOU
@@ -27,6 +29,12 @@ EOU
 
 verbose() {
 	[ $verbose = "true" ]
+}
+
+logverbose() {
+	if verbose; then
+		echo "${@}"
+	fi
 }
 
 debug() {
@@ -53,11 +61,11 @@ import_utilities() {
 	fi
 }
 
-# This function will be called when the script exits or when one of TERM or 
+# This function will be called when the script exits or when one of TERM or
 # INT signal is received.
 cleanup() {
 	# your cleaning code here ...
-	die "Exit trapped."
+	exit -1
 }
 
 initialize() {
@@ -74,7 +82,9 @@ initialize() {
 }
 
 main() {
+	configure
 	initialize
+
 	if verbose; then
 		echo "Verbose mode..."
 		echo
@@ -85,7 +95,7 @@ main() {
 }
 
 # check if script is being executed
-if [[ $_ == $0 ]]; then
+if [[ $0 == "$BASH_SOURCE" ]]; then
 	eval "$(docopts -h "$(usage)" : "$@")"
 	main
 fi
