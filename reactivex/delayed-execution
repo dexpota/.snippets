@@ -1,0 +1,8 @@
+---
+description: Delayed execution of a given callback.
+languages: [java, kotlin]
+name: delayed-execution
+type: static
+---
+Completable.timer(5, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
+	.subscribe(this::getTransactionDetails);
