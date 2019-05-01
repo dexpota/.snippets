@@ -1,6 +1,6 @@
 [header]: ./snippets.png
 [license]: https://opensource.org/licenses/MIT
-[license-badge]: https://img.shields.io/badge/license-MIT-green.svg?style=for-the-badge
+[license-badge]: https://img.shields.io/badge/license-MIT-green.svg?style=for-the-badge&color=a82655
 
 # .snippets 💻
 
