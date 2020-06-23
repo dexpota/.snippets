@@ -1,0 +1,19 @@
+// Publish an artifact with maven-publish plugin
+publishing {
+  release(MavenPublication) {
+    // Manually add the dependencies because maven-publish does not support AAR yet
+    // see https://stackoverflow.com/questions/24743562/gradle-not-including-dependencies-in-published-pom-xml
+    pom.withXml {
+        def dependenciesNode = asNode().appendNode('dependencies')
+
+        configurations.implementation.allDependencies.each {
+            if (it.group != null && it.name != null && it.version != null) {
+                def dependencyNode = dependenciesNode.appendNode('dependency')
+                dependencyNode.appendNode('groupId', it.group)
+                dependencyNode.appendNode('artifactId', it.name)
+                dependencyNode.appendNode('version', it.version)
+            }
+        }
+    }
+  }
+}
